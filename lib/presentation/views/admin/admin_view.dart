@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/export.dart';
 
 class AdminView extends StatelessWidget {
   const AdminView({super.key});

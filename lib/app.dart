@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Core
-import 'core/theme/app_theme.dart';
+import 'core/theme/export.dart';
 import 'core/constants/app_constants.dart';
 import 'core/network/network_info.dart';
 
@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: AppConstants.appName,
-        theme: AppTheme.lightTheme,
+        theme: TemaGeneral.temaClaro,
         debugShowCheckedModeBanner: false,
         initialRoute: AppConstants.routeAuth,
         routes: {

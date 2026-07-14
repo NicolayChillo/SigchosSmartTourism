@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../theme/export.dart';
 
 class LoadingWidget extends StatelessWidget {
   final String? message;
@@ -30,7 +30,7 @@ class LoadingWidget extends StatelessWidget {
               ],
             ),
             child: const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(.primary),
               strokeWidth: 3,
             ),
           ),

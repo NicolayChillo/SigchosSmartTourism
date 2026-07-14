@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import '../../core/theme/export.dart';
 
 class LugarCard extends StatelessWidget {
   final String title;
@@ -52,7 +52,7 @@ class LugarCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.secondary,
+                      color: AppColor.secondary,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
