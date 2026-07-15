@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth_viewmodel.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/export.dart';
 import '../../../core/widgets/custom_button.dart';
 
 class PerfilView extends StatelessWidget {
@@ -41,32 +41,32 @@ class PerfilView extends StatelessWidget {
                   // User Avatar
                   CircleAvatar(
                     radius: 60,
-                    backgroundColor: AppColors.primary.withOpacity(0.1),
+                    backgroundColor: ColoresApp.primario.withValues(alpha: 0.1),
                     backgroundImage: user.fotoPerfil != null ? NetworkImage(user.fotoPerfil!) : null,
                     child: user.fotoPerfil == null
                         ? const Icon(
                             Icons.person,
                             size: 60,
-                            color: AppColors.primary,
+                            color: ColoresApp.primario,
                           )
                         : null,
                   ),
                   const SizedBox(height: 20),
                   Text(
                     user.nombre,
-                    style: AppTextStyles.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     user.email,
-                    style: AppTextStyles.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 12),
                   // Role Badge
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     decoration: BoxDecoration(
-                      color: user.rol == 'administrador' ? AppColors.secondary : AppColors.primary,
+                      color: user.rol == 'administrador' ? ColoresApp.secundario : ColoresApp.primario,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -83,19 +83,19 @@ class PerfilView extends StatelessWidget {
                   const SizedBox(height: 20),
                   // Settings list item examples
                   ListTile(
-                    leading: const Icon(Icons.favorite_border, color: AppColors.primary),
+                    leading: const Icon(Icons.favorite_border, color: ColoresApp.primario),
                     title: const Text('Mis Favoritos'),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {},
                   ),
                   ListTile(
-                    leading: const Icon(Icons.history_outlined, color: AppColors.primary),
+                    leading: const Icon(Icons.history_outlined, color: ColoresApp.primario),
                     title: const Text('Historial de Rutas'),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {},
                   ),
                   ListTile(
-                    leading: const Icon(Icons.help_outline, color: AppColors.primary),
+                    leading: const Icon(Icons.help_outline, color: ColoresApp.primario),
                     title: const Text('Ayuda & Soporte'),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {},

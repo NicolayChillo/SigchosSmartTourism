@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/export.dart';
 import '../../../core/utils/formatters.dart';
 
 class RutasView extends StatefulWidget {
@@ -69,7 +69,7 @@ class _RutasViewState extends State<RutasView> {
                               difficultyColor = Colors.red;
                               break;
                             default:
-                              difficultyColor = AppColors.textSecondary;
+                              difficultyColor = ColoresApp.textoClaro;
                           }
 
                           return Card(
@@ -83,28 +83,28 @@ class _RutasViewState extends State<RutasView> {
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.1),
+                                  color: ColoresApp.primario.withValues(alpha: 0.1),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(
                                   Icons.directions_run_rounded,
-                                  color: AppColors.primary,
+                                  color: ColoresApp.primario,
                                   size: 28,
                                 ),
                               ),
                               title: Text(
                                 ruta.nombre,
-                                style: AppTextStyles.titleSmall.copyWith(fontSize: 16),
+                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 16),
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.social_distance, size: 16, color: AppColors.textSecondary),
+                                    Icon(Icons.social_distance, size: 16, color: ColoresApp.textoClaro),
                                     const SizedBox(width: 4),
                                     Text(Formatters.formatDistance(ruta.distanciaKm)),
                                     const SizedBox(width: 16),
-                                    Icon(Icons.access_time, size: 16, color: AppColors.textSecondary),
+                                    Icon(Icons.access_time, size: 16, color: ColoresApp.textoClaro),
                                     const SizedBox(width: 4),
                                     Text(Formatters.formatDuration(ruta.tiempoEstimadoMin)),
                                   ],
@@ -116,7 +116,7 @@ class _RutasViewState extends State<RutasView> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: difficultyColor.withOpacity(0.1),
+                                      color: difficultyColor.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(

@@ -52,7 +52,7 @@ class LugarCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColor.secondary,
+                      color: ColoresApp.secundario,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
@@ -75,9 +75,9 @@ class LugarCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.titleSmall.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       fontSize: 18,
-                      color: AppColors.textPrimary,
+                      color: ColoresApp.textoOscuro,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -94,22 +94,22 @@ class LugarCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             rating.toStringAsFixed(1),
-                            style: AppTextStyles.bodyMedium.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: ColoresApp.textoOscuro,
                             ),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '($totalReviews)',
-                            style: AppTextStyles.bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
                       Text(
                         'Ver detalles →',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.primary,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: ColoresApp.primario,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -128,12 +128,12 @@ class LugarCard extends StatelessWidget {
     return Container(
       height: 180,
       width: double.infinity,
-      color: AppColors.primary.withOpacity(0.08),
+      color: ColoresApp.primario.withValues(alpha: 0.08),
       child: const Center(
         child: Icon(
           Icons.image_not_supported_outlined,
           size: 48,
-          color: AppColors.primary,
+          color: ColoresApp.primario,
         ),
       ),
     );

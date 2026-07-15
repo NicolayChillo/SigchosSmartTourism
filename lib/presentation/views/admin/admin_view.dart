@@ -15,7 +15,7 @@ class AdminView extends StatelessWidget {
           title: const Text('Panel de Administración'),
           bottom: const TabBar(
             isScrollable: true,
-            indicatorColor: AppColors.secondary,
+            indicatorColor: ColoresApp.secundario,
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white70,
             tabs: [
@@ -65,7 +65,7 @@ class _AdminListTab extends StatelessWidget {
           ? Center(
               child: Text(
                 'No hay registros para mostrar.',
-                style: AppTextStyles.bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             )
           : ListView.builder(
@@ -107,7 +107,7 @@ class _AdminListTab extends StatelessWidget {
               },
             ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.secondary,
+        backgroundColor: ColoresApp.secundario,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () {
           // Trigger create dialog

@@ -4,7 +4,7 @@ import '../../viewmodels/lugares_viewmodel.dart';
 import '../../widgets/lugar_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/export.dart';
 
 class LugaresView extends StatefulWidget {
   const LugaresView({super.key});
@@ -84,10 +84,10 @@ class _LugaresViewState extends State<LugaresView> {
                       });
                       _loadLugares();
                     },
-                    selectedColor: AppColors.primary,
+                    selectedColor: ColoresApp.primario,
                     checkmarkColor: Colors.white,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.textPrimary,
+                      color: isSelected ? Colors.white : ColoresApp.textoOscuro,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                     shape: RoundedRectangleBorder(

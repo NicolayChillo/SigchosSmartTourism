@@ -23,14 +23,14 @@ class LoadingWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
               ],
             ),
             child: const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(ColoresApp.primario),
               strokeWidth: 3,
             ),
           ),
@@ -38,9 +38,9 @@ class LoadingWidget extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               message!,
-              style: AppTextStyles.bodyMedium.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: ColoresApp.textoOscuro,
               ),
               textAlign: TextAlign.center,
             ),

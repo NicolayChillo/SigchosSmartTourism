@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth_viewmodel.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/export.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/custom_button.dart';
 
@@ -52,7 +52,7 @@ class _AuthViewState extends State<AuthView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(authVm.errorMessage!),
-          backgroundColor: AppColors.error,
+          backgroundColor: ColoresApp.error,
         ),
       );
     }
@@ -76,26 +76,26 @@ class _AuthViewState extends State<AuthView> {
                   child: Icon(
                     Icons.explore_outlined,
                     size: 80,
-                    color: AppColors.primary,
+                    color: ColoresApp.primario,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Center(
                   child: Text(
                     'Sigchos Smart Tourist',
-                    style: AppTextStyles.titleLarge.copyWith(color: AppColors.primary),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(color: ColoresApp.primario),
                   ),
                 ),
                 Center(
                   child: Text(
                     'Descubre el corazón de los Andes',
-                    style: AppTextStyles.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
                 const SizedBox(height: 48),
                 Text(
                   _isLoginMode ? 'Iniciar Sesión' : 'Crear una cuenta',
-                  style: AppTextStyles.titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 24),
                 if (!_isLoginMode) ...[
@@ -155,8 +155,8 @@ class _AuthViewState extends State<AuthView> {
                       _isLoginMode
                           ? '¿No tienes cuenta? Regístrate aquí'
                           : '¿Ya tienes una cuenta? Inicia sesión',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.secondary,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: ColoresApp.secundario,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

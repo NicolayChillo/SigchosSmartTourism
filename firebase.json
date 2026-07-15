@@ -1,0 +1,10 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "flutter": {"platforms": {"android": {"default": {"projectId": "sigchos-smart-tourism", "appId": "1:531515283838:android:1e55d25e43d5fee499bb2f", "fileOutput": "android/app/google-services.json"}}, "dart": {"lib/firebase_options.dart": {"projectId": "sigchos-smart-tourism", "configurations": {"android": "1:531515283838:android:1e55d25e43d5fee499bb2f"}}}}}
+}

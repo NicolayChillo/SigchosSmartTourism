@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeBgColor = backgroundColor ?? AppColors.primary;
+    final themeBgColor = backgroundColor ?? ColoresApp.primario;
     final themeTextColor = textColor ?? Colors.white;
 
     return SizedBox(
@@ -55,7 +55,7 @@ class CustomButton extends StatelessWidget {
                   ],
                   Text(
                     text,
-                    style: AppTextStyles.buttonText.copyWith(color: themeTextColor),
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(color: themeTextColor),
                   ),
                 ],
               ),
@@ -63,3 +63,4 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+

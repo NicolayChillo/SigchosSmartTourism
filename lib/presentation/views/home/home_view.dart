@@ -6,7 +6,7 @@ import '../hosterias/hosterias_view.dart';
 import '../rutas/rutas_view.dart';
 import '../perfil/perfil_view.dart';
 import '../admin/admin_view.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/export.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -43,8 +43,8 @@ class _HomeViewState extends State<HomeView> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondary,
+        selectedItemColor: ColoresApp.primario,
+        unselectedItemColor: ColoresApp.textoClaro,
         items: [
           const BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -118,7 +118,7 @@ class _InicioTab extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.black.withOpacity(0.6),
+                      Colors.black.withValues(alpha: 0.6),
                       Colors.transparent,
                     ],
                     begin: Alignment.bottomCenter,
@@ -129,7 +129,7 @@ class _InicioTab extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   'Descubre la magia de Sigchos',
-                  style: AppTextStyles.titleLarge.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Colors.white,
                     fontSize: 24,
                   ),
@@ -142,7 +142,7 @@ class _InicioTab extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Card(
                 elevation: 0,
-                color: AppColors.primary.withOpacity(0.08),
+                color: ColoresApp.primario.withValues(alpha: 0.08),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -153,16 +153,16 @@ class _InicioTab extends StatelessWidget {
                     children: [
                       Text(
                         '¡Bienvenido a Sigchos!',
-                        style: AppTextStyles.titleSmall.copyWith(
-                          color: AppColors.primary,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: ColoresApp.primario,
                           fontSize: 18,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Explora senderos andinos, admira cascadas espectaculares y experimenta la cultura local de nuestro hermoso cantón.',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textPrimary,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: ColoresApp.textoOscuro,
                         ),
                       ),
                     ],
@@ -176,7 +176,7 @@ class _InicioTab extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Categorías Principales',
-                style: AppTextStyles.titleSmall.copyWith(fontSize: 18),
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 18),
               ),
             ),
             const SizedBox(height: 12),
@@ -193,7 +193,7 @@ class _InicioTab extends StatelessWidget {
                   context,
                   title: 'Atractivos',
                   icon: Icons.landscape,
-                  color: AppColors.primary,
+                  color: ColoresApp.primario,
                   onTap: () {
                     // Navigate to places tab or view
                   },
@@ -202,7 +202,7 @@ class _InicioTab extends StatelessWidget {
                   context,
                   title: 'Hosterías',
                   icon: Icons.hotel,
-                  color: AppColors.secondary,
+                  color: ColoresApp.secundario,
                   onTap: () {
                     // Navigate to hoterias tab
                   },
@@ -211,7 +211,7 @@ class _InicioTab extends StatelessWidget {
                   context,
                   title: 'Emprendimientos',
                   icon: Icons.storefront,
-                  color: AppColors.accent,
+                  color: ColoresApp.acento,
                   onTap: () {
                     Navigator.pushNamed(context, '/emprendimientos');
                   },
@@ -259,7 +259,7 @@ class _InicioTab extends StatelessWidget {
               Icon(icon, color: color, size: 32),
               Text(
                 title,
-                style: AppTextStyles.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "531515283838",
+    "firebase_url": "https://sigchos-smart-tourism-default-rtdb.firebaseio.com",
+    "project_id": "sigchos-smart-tourism",
+    "storage_bucket": "sigchos-smart-tourism.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531515283838:android:1e55d25e43d5fee499bb2f",
+        "android_client_info": {
+          "package_name": "com.example.sigchos_smart_tourist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHPDeL4IRbWQ5fHiUVqqOOcRFAPzPd8Dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
