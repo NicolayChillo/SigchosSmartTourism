@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
+import 'lugar_detail_view.dart';
 import '../../widgets/lugar_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -39,6 +41,102 @@ class _LugaresViewState extends State<LugaresView> {
     );
   }
 
+  Future<void> _buscarCercanos(BuildContext context, LugaresViewModel vm) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Activa el GPS para buscar atractivos cercanos.')),
+        );
+      }
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Se necesita permiso de ubicación para esta función.')),
+        );
+      }
+      return;
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Buscando atractivos cercanos...')),
+      );
+    }
+
+    try {
+      final position = await Geolocator.getCurrentPosition();
+      await vm.fetchLugaresCercanos(position.latitude, position.longitude);
+      if (context.mounted) _mostrarCercanos(context, vm);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No se pudo obtener tu ubicación: $e')),
+        );
+      }
+    }
+  }
+
+  void _mostrarCercanos(BuildContext context, LugaresViewModel vm) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        final cercanos = vm.lugaresCercanos;
+        return SafeArea(
+          child: SizedBox(
+            height: MediaQuery.of(ctx).size.height * 0.6,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Atractivos cercanos (radio 20 km)',
+                    style: Theme.of(ctx).textTheme.titleMedium,
+                  ),
+                ),
+                Expanded(
+                  child: cercanos.isEmpty
+                      ? const Center(child: Text('No se encontraron atractivos cerca de ti.'))
+                      : ListView.builder(
+                          itemCount: cercanos.length,
+                          itemBuilder: (context, index) {
+                            final lugar = cercanos[index];
+                            return ListTile(
+                              leading: const Icon(Icons.place, color: ColoresApp.primario),
+                              title: Text(lugar.nombre),
+                              subtitle: Text(lugar.tipo),
+                              onTap: () {
+                                Navigator.pop(ctx);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => LugarDetailView(lugar: lugar)),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final placesVm = Provider.of<LugaresViewModel>(context);
@@ -49,13 +147,7 @@ class _LugaresViewState extends State<LugaresView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.my_location),
-            onPressed: () {
-              // Trigger GPS nearby search
-              placesVm.fetchLugaresCercanos(-0.7012, -78.8872); // Sigchos coordinates mock
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Buscando atractivos cercanos...')),
-              );
-            },
+            onPressed: () => _buscarCercanos(context, placesVm),
           ),
         ],
       ),
@@ -129,9 +221,9 @@ class _LugaresViewState extends State<LugaresView> {
                                   rating: lugar.promedioCalificacion,
                                   totalReviews: lugar.totalCalificaciones,
                                   onTap: () {
-                                    // Open place details view
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Detalle de ${lugar.nombre}')),
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => LugarDetailView(lugar: lugar)),
                                     );
                                   },
                                 );

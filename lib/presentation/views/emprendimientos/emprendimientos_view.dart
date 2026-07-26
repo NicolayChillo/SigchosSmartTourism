@@ -4,6 +4,7 @@ import '../../viewmodels/lugares_viewmodel.dart';
 import '../../widgets/lugar_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
+import 'emprendimiento_detail_view.dart';
 
 class EmprendimientosView extends StatefulWidget {
   const EmprendimientosView({super.key});
@@ -62,8 +63,9 @@ class _EmprendimientosViewState extends State<EmprendimientosView> {
                             rating: emp.promedioCalificacion,
                             totalReviews: emp.totalCalificaciones,
                             onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Emprendimiento: ${emp.nombre} (${emp.categoria})')),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => EmprendimientoDetailView(emprendimiento: emp)),
                               );
                             },
                           );

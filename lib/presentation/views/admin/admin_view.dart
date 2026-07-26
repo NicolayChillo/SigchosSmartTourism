@@ -2,9 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
 import '../../../core/theme/export.dart';
+import '../../../core/data/seed_data.dart';
+import 'lugar_form_view.dart';
+import 'hosteria_form_view.dart';
+import 'emprendimiento_form_view.dart';
+import 'ruta_form_view.dart';
 
 class AdminView extends StatelessWidget {
   const AdminView({super.key});
+
+  Future<void> _cargarCatalogoInicial(BuildContext context) async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Cargar catálogo inicial'),
+        content: const Text(
+          'Esto creará los 14 atractivos, 5 hosterías y 5 emprendimientos reales de Sigchos en Firestore. '
+          'Vuelve a ejecutarlo solo si sabes que quieres duplicar registros.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Cargar')),
+        ],
+      ),
+    );
+    if (confirmado != true || !context.mounted) return;
+
+    final vm = Provider.of<LugaresViewModel>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(const SnackBar(content: Text('Cargando catálogo inicial...')));
+
+    var creados = 0;
+    for (final lugar in seedLugares) {
+      if (await vm.createLugar(lugar)) creados++;
+    }
+    for (final hosteria in seedHosterias) {
+      if (await vm.createHosteria(hosteria)) creados++;
+    }
+    for (final emprendimiento in seedEmprendimientos) {
+      if (await vm.createEmprendimiento(emprendimiento)) creados++;
+    }
+
+    messenger.showSnackBar(
+      SnackBar(content: Text('Catálogo cargado: $creados registros creados.')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +55,13 @@ class AdminView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Panel de Administración'),
+          actions: [
+            IconButton(
+              tooltip: 'Cargar catálogo inicial',
+              icon: const Icon(Icons.cloud_upload_outlined),
+              onPressed: () => _cargarCatalogoInicial(context),
+            ),
+          ],
           bottom: const TabBar(
             isScrollable: true,
             indicatorColor: ColoresApp.secundario,
@@ -43,6 +92,24 @@ class _AdminListTab extends StatelessWidget {
   final String coleccion;
 
   const _AdminListTab({required this.coleccion});
+
+  void _abrirFormulario(BuildContext context, {dynamic item}) {
+    Widget form;
+    switch (coleccion) {
+      case 'lugares':
+        form = LugarFormView(lugar: item);
+        break;
+      case 'hosterias':
+        form = HosteriaFormView(hosteria: item);
+        break;
+      case 'emprendimientos':
+        form = EmprendimientoFormView(emprendimiento: item);
+        break;
+      default:
+        form = RutaFormView(ruta: item);
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (_) => form));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,17 +153,11 @@ class _AdminListTab extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () {
-                            // Trigger edit dialog
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Editar ${item.nombre}')),
-                            );
-                          },
+                          onPressed: () => _abrirFormulario(context, item: item),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () {
-                            // Show delete confirmation dialog
                             _confirmDelete(context, placesVm, item);
                           },
                         ),
@@ -108,13 +169,8 @@ class _AdminListTab extends StatelessWidget {
             ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: ColoresApp.secundario,
+        onPressed: () => _abrirFormulario(context),
         child: const Icon(Icons.add, color: Colors.white),
-        onPressed: () {
-          // Trigger create dialog
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Crear nuevo registro en $coleccion')),
-          );
-        },
       ),
     );
   }

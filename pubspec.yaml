@@ -35,14 +35,17 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   provider: ^6.1.5+1
-  firebase_core: ^2.32.0
-  firebase_auth: ^4.16.0
-  cloud_firestore: ^4.17.5
-  firebase_storage: ^11.6.5
+  firebase_core: ^4.12.1
+  firebase_auth: ^6.5.6
+  cloud_firestore: ^6.7.1
   google_maps_flutter: ^2.17.1
   geolocator: ^14.0.3
   image_picker: ^1.2.3
-  geoflutterfire2: ^2.3.15
+  image: ^4.8.0
+  flutter_compass: ^0.8.1
+  firebase_messaging: ^16.4.3
+  flutter_local_notifications: ^22.1.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +68,32 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/atractivos/aguas-termales-de-la-comunidad-de-yanayacu/
+    - assets/images/atractivos/bosque-protector-sarapullo/
+    - assets/images/atractivos/canon-del-aguila/
+    - assets/images/atractivos/canon-del-toachi/
+    - assets/images/atractivos/churo-de-amanta/
+    - assets/images/atractivos/columnas-de-tangan/
+    - assets/images/atractivos/la-hoya-del-rio-toachi/
+    - assets/images/atractivos/laguna-de-quilotoa/
+    - assets/images/atractivos/laguna-de-tilinte/
+    - assets/images/atractivos/las-tres-chorreras-del-rio-san-pablo/
+    - assets/images/atractivos/licamancha/
+    - assets/images/atractivos/los-ilinizas/
+    - assets/images/atractivos/malqui-y-machay/
+    - assets/images/atractivos/mirador-chinalo-bajo/
+    - assets/images/emprendimientos/el-ultimo-inca/
+    - assets/images/emprendimientos/gastronomia-tradicional-de-sigchos/
+    - assets/images/emprendimientos/grandes-food/
+    - assets/images/emprendimientos/sigchoslac/
+    - assets/images/emprendimientos/vinos-perla-andina/
+    - assets/images/hosterias/hostal-el-castillo/
+    - assets/images/hosterias/hostal-ilinizas/
+    - assets/images/hosterias/hosteria-el-trapiche/
+    - assets/images/hosterias/hosteria-san-jose/
+    - assets/images/hosterias/hosteria-san-miguel/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

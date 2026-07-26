@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth_viewmodel.dart';
+import '../../viewmodels/notifications_viewmodel.dart';
 import '../lugares/lugares_view.dart';
 import '../hosterias/hosterias_view.dart';
 import '../rutas/rutas_view.dart';
 import '../perfil/perfil_view.dart';
 import '../admin/admin_view.dart';
+import '../notificaciones/notificaciones_view.dart';
 import '../../../core/theme/export.dart';
 
 class HomeView extends StatefulWidget {
@@ -18,6 +20,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
+  void _irATab(int index) => setState(() => _selectedIndex = index);
+
   @override
   Widget build(BuildContext context) {
     final authVm = Provider.of<AuthViewModel>(context);
@@ -25,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
 
     // Define views list based on user role
     final List<Widget> views = [
-      const _InicioTab(),
+      _InicioTab(onNavigate: _irATab),
       const LugaresView(),
       const HosteriasView(),
       const RutasView(),
@@ -84,17 +88,28 @@ class _HomeViewState extends State<HomeView> {
 }
 
 class _InicioTab extends StatelessWidget {
-  const _InicioTab();
+  final ValueChanged<int> onNavigate;
+
+  const _InicioTab({required this.onNavigate});
 
   @override
   Widget build(BuildContext context) {
+    final notificationsVm = Provider.of<NotificationsViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sigchos Smart Tourist'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none_outlined),
-            onPressed: () {},
+            icon: Badge(
+              label: Text('${notificationsVm.unreadCount}'),
+              isLabelVisible: notificationsVm.unreadCount > 0,
+              child: const Icon(Icons.notifications_none_outlined),
+            ),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const NotificacionesView()),
+            ),
           ),
         ],
       ),
@@ -194,18 +209,14 @@ class _InicioTab extends StatelessWidget {
                   title: 'Atractivos',
                   icon: Icons.landscape,
                   color: ColoresApp.primario,
-                  onTap: () {
-                    // Navigate to places tab or view
-                  },
+                  onTap: () => onNavigate(1),
                 ),
                 _buildQuickLinkCard(
                   context,
                   title: 'Hosterías',
                   icon: Icons.hotel,
                   color: ColoresApp.secundario,
-                  onTap: () {
-                    // Navigate to hoterias tab
-                  },
+                  onTap: () => onNavigate(2),
                 ),
                 _buildQuickLinkCard(
                   context,
@@ -221,9 +232,7 @@ class _InicioTab extends StatelessWidget {
                   title: 'Rutas y Senderos',
                   icon: Icons.directions_walk,
                   color: Colors.brown,
-                  onTap: () {
-                    // Navigate to routes tab
-                  },
+                  onTap: () => onNavigate(3),
                 ),
               ],
             ),

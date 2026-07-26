@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/export.dart';
+import '../../core/widgets/app_image.dart';
 
 class LugarCard extends StatelessWidget {
   final String title;
@@ -38,12 +39,11 @@ class LugarCard extends StatelessWidget {
             Stack(
               children: [
                 imageUrl != null && imageUrl!.isNotEmpty
-                    ? Image.network(
-                        imageUrl!,
+                    ? AppImage(
+                        path: imageUrl!,
                         height: 180,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
                       )
                     : _buildPlaceholder(),
                 Positioned(

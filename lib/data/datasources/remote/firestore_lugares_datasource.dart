@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:geoflutterfire2/geoflutterfire2.dart';
 import '../../models/lugar_model.dart';
 import '../../models/hosteria_model.dart';
 import '../../models/emprendimiento_model.dart';
 import '../../models/ruta_model.dart';
 import '../../../core/errors/failures.dart';
+import '../../../core/utils/geohash_helper.dart';
 
 abstract class FirestoreLugaresDataSource {
   // Lugares
@@ -39,15 +37,13 @@ abstract class FirestoreLugaresDataSource {
   Future<List<ComentarioModel>> getComentarios(String id, String coleccionPadre);
   Future<void> addComentario(String id, String coleccionPadre, ComentarioModel comentario);
   Future<void> addCalificacion(String id, String coleccionPadre, CalificacionModel calificacion);
-
-  // Almacenamiento de imágenes
-  Future<String> uploadImage(File imageFile, String folderPath);
 }
 
 class FirestoreLugaresDataSourceImpl implements FirestoreLugaresDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  final GeoFlutterFire _geo = GeoFlutterFire();
+
+  /// Radio de búsqueda para "atractivos cercanos", en kilómetros.
+  static const double _radioCercanosKm = 20.0;
 
   @override
   Future<List<LugarModel>> getLugares({String? tipo}) async {
@@ -57,15 +53,9 @@ class FirestoreLugaresDataSourceImpl implements FirestoreLugaresDataSource {
         query = query.where('tipo', isEqualTo: tipo);
       }
       final snapshot = await query.get();
-      return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        final geoPoint = data['geopoint'] as GeoPoint?;
-        return LugarModel.fromJson({
-          ...data,
-          'latitude': geoPoint?.latitude ?? 0.0,
-          'longitude': geoPoint?.longitude ?? 0.0,
-        }, doc.id);
-      }).toList();
+      return snapshot.docs
+          .map((doc) => LugarModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+          .toList();
     } catch (e) {
       throw ServerFailure('Error al obtener lugares: ${e.toString()}');
     }
@@ -73,39 +63,31 @@ class FirestoreLugaresDataSourceImpl implements FirestoreLugaresDataSource {
 
   @override
   Future<List<LugarModel>> getLugaresCercanos(double latitude, double longitude) async {
-    try {
-      final collectionRef = _firestore.collection('lugares');
-      final GeoFirePoint center = _geo.point(latitude: latitude, longitude: longitude);
-      
-      // Consultar en un radio de 20 km
-      final stream = _geo.collection(collectionRef: collectionRef).within(
-        center: center,
-        radius: 20.0,
-        field: 'geopoint',
+    // El catálogo de esta app es pequeño (decenas de atractivos), así que en
+    // vez de una geoquery de Firestore, se trae todo y se filtra/ordena por
+    // distancia real en el cliente con GeohashHelper.
+    final todos = await getLugares();
+    final conDistancia = todos.map((l) {
+      final distancia = GeohashHelper.calculateDistanceInKm(
+        latitude,
+        longitude,
+        l.latitude,
+        l.longitude,
       );
+      return (lugar: l, distancia: distancia);
+    }).where((e) => e.distancia <= _radioCercanosKm).toList()
+      ..sort((a, b) => a.distancia.compareTo(b.distancia));
 
-      final List<DocumentSnapshot> docs = await stream.first;
-      return docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        final geoPoint = data['geopoint'] as GeoPoint?;
-        return LugarModel.fromJson({
-          ...data,
-          'latitude': geoPoint?.latitude ?? 0.0,
-          'longitude': geoPoint?.longitude ?? 0.0,
-        }, doc.id);
-      }).toList();
-    } catch (e) {
-      throw ServerFailure('Error al realizar geoquery de lugares cercanos: ${e.toString()}');
-    }
+    return conDistancia.map((e) => e.lugar).toList();
   }
 
   @override
   Future<void> createLugar(LugarModel lugar) async {
     try {
-      final geoPoint = GeoPoint(lugar.latitude, lugar.longitude);
-      final json = lugar.toJson();
-      json['geopoint'] = geoPoint;
-      await _firestore.collection('lugares').doc(lugar.id.isEmpty ? null : lugar.id).set(json);
+      await _firestore
+          .collection('lugares')
+          .doc(lugar.id.isEmpty ? null : lugar.id)
+          .set(lugar.toJson());
     } catch (e) {
       throw ServerFailure('Error al guardar el lugar: ${e.toString()}');
     }
@@ -114,10 +96,7 @@ class FirestoreLugaresDataSourceImpl implements FirestoreLugaresDataSource {
   @override
   Future<void> updateLugar(LugarModel lugar) async {
     try {
-      final geoPoint = GeoPoint(lugar.latitude, lugar.longitude);
-      final json = lugar.toJson();
-      json['geopoint'] = geoPoint;
-      await _firestore.collection('lugares').doc(lugar.id).update(json);
+      await _firestore.collection('lugares').doc(lugar.id).update(lugar.toJson());
     } catch (e) {
       throw ServerFailure('Error al actualizar el lugar: ${e.toString()}');
     }
@@ -328,33 +307,27 @@ class FirestoreLugaresDataSourceImpl implements FirestoreLugaresDataSource {
   @override
   Future<void> addCalificacion(String id, String coleccionPadre, CalificacionModel calificacion) async {
     try {
+      final docRef = _firestore.collection(coleccionPadre).doc(id);
       // El ID del documento es el UID del usuario para evitar doble calificación
-      await _firestore
-          .collection(coleccionPadre)
-          .doc(id)
-          .collection('calificaciones')
-          .doc(calificacion.uid)
-          .set(calificacion.toJson());
+      await docRef.collection('calificaciones').doc(calificacion.uid).set(calificacion.toJson());
+
+      // El padre guarda el promedio y el total precalculados para no tener
+      // que leer toda la subcolección en cada listado.
+      final todas = await docRef.collection('calificaciones').get();
+      final valores = todas.docs
+          .map((d) => (d.data()['valor'] as num?)?.toInt() ?? 0)
+          .toList();
+      final total = valores.length;
+      final promedio = total == 0
+          ? 0.0
+          : valores.reduce((a, b) => a + b) / total;
+
+      await docRef.update({
+        'promedioCalificacion': promedio,
+        'totalCalificaciones': total,
+      });
     } catch (e) {
       throw ServerFailure('Error al registrar calificación: ${e.toString()}');
-    }
-  }
-
-  // Almacenamiento de imágenes
-  @override
-  Future<String> uploadImage(File imageFile, String folderPath) async {
-    try {
-      final String fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final ref = _storage.ref().child(folderPath).child(fileName);
-      
-      final uploadTask = await ref.putFile(
-        imageFile,
-        SettableMetadata(contentType: 'image/jpeg'),
-      );
-      
-      return await uploadTask.ref.getDownloadURL();
-    } catch (e) {
-      throw ServerFailure('Error al subir imagen a Storage: ${e.toString()}');
     }
   }
 }

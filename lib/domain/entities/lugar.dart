@@ -1,7 +1,7 @@
 class Lugar {
   final String id;
   final String nombre;
-  final String tipo; // 'cascada' | 'mirador' | 'sendero' | 'cultural' | 'historico'
+  final String tipo; // 'cascada' | 'laguna' | 'mirador' | 'sendero' | 'cultural' | 'historico'
   final String descripcion;
   final List<String> fotos;
   final double latitude;

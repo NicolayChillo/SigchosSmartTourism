@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Raw source material (docs/photos) used to build assets/ and seed_data.dart -
+# not part of the app build, kept out of the repo.
+/data_source/

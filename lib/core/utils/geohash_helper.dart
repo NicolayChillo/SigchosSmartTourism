@@ -27,6 +27,30 @@ class GeohashHelper {
     return degrees * pi / 180;
   }
 
+  static double _radiansToDegrees(double radians) {
+    return radians * 180 / pi;
+  }
+
+  /// Bearing (0-360°, 0 = norte) desde el punto de origen hacia el destino,
+  /// para usarse junto al heading de la brújula del dispositivo.
+  static double calculateBearing(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) {
+    final double lat1Rad = _degreesToRadians(startLatitude);
+    final double lat2Rad = _degreesToRadians(endLatitude);
+    final double dLon = _degreesToRadians(endLongitude - startLongitude);
+
+    final double y = sin(dLon) * cos(lat2Rad);
+    final double x =
+        cos(lat1Rad) * sin(lat2Rad) - sin(lat1Rad) * cos(lat2Rad) * cos(dLon);
+
+    final double bearing = _radiansToDegrees(atan2(y, x));
+    return (bearing + 360) % 360;
+  }
+
   /// Simple implementation of geohash encoding for reference/fallback
   static String encodeGeohash(double latitude, double longitude, {int precision = 9}) {
     const String base32 = '0123456789bcdefghjkmnpqrstuvwxyz';

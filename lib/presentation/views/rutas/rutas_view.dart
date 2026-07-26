@@ -5,6 +5,7 @@ import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
 import '../../../core/theme/export.dart';
 import '../../../core/utils/formatters.dart';
+import 'ruta_detail_view.dart';
 
 class RutasView extends StatefulWidget {
   const RutasView({super.key});
@@ -23,7 +24,9 @@ class _RutasViewState extends State<RutasView> {
   }
 
   void _loadRutas() {
-    Provider.of<LugaresViewModel>(context, listen: false).fetchRutas();
+    final vm = Provider.of<LugaresViewModel>(context, listen: false);
+    vm.fetchRutas();
+    if (vm.lugares.isEmpty) vm.fetchLugares();
   }
 
   @override
@@ -133,8 +136,9 @@ class _RutasViewState extends State<RutasView> {
                                 ],
                               ),
                               onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Cargando mapa para: ${ruta.nombre}')),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => RutaDetailView(ruta: ruta)),
                                 );
                               },
                             ),

@@ -4,6 +4,7 @@ import '../../viewmodels/lugares_viewmodel.dart';
 import '../../widgets/lugar_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
+import 'hosteria_detail_view.dart';
 
 class HosteriasView extends StatefulWidget {
   const HosteriasView({super.key});
@@ -62,8 +63,9 @@ class _HosteriasViewState extends State<HosteriasView> {
                             rating: hosteria.promedioCalificacion,
                             totalReviews: hosteria.totalCalificaciones,
                             onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Hostería: ${hosteria.nombre}. Contacto: ${hosteria.contacto}')),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => HosteriaDetailView(hosteria: hosteria)),
                               );
                             },
                           );

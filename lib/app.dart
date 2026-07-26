@@ -17,6 +17,7 @@ import 'data/repositories/lugares_repository_impl.dart';
 // ViewModels
 import 'presentation/viewmodels/auth_viewmodel.dart';
 import 'presentation/viewmodels/lugares_viewmodel.dart';
+import 'presentation/viewmodels/notifications_viewmodel.dart';
 
 // Views
 import 'presentation/views/auth/auth_view.dart';
@@ -65,6 +66,9 @@ class MyApp extends StatelessWidget {
           create: (context) => LugaresViewModel(
             repository: Provider.of<LugaresRepositoryImpl>(context, listen: false),
           ),
+        ),
+        ChangeNotifierProvider<NotificationsViewModel>(
+          create: (_) => NotificationsViewModel(),
         ),
       ],
       child: MaterialApp(
