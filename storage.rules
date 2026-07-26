@@ -1,9 +1,13 @@
 rules_version = '2';
 
+// La app no sube nada a Firebase Storage: las fotos de usuarios y del
+// catálogo se comprimen y se guardan como data URI base64 directamente en
+// Firestore (ver lib/core/utils/image_utils.dart). Storage queda cerrado
+// por defecto para no dejar el bucket abierto sin necesidad.
 service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {
-      allow read, write: if request.time < timestamp.date(2026, 8, 14);
+      allow read, write: if false;
     }
   }
 }

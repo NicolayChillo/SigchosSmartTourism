@@ -6,11 +6,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:label="sigchos_smart_tourist"
+        android:label="Sigchos Smart Tourist"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- Reemplaza este valor por tu propia API Key de "Maps SDK for Android"
-             generada en Google Cloud Console (proyecto sigchos-smart-tourism). -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_GOOGLE_MAPS_API_KEY_HERE"/>
