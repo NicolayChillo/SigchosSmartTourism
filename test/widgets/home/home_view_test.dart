@@ -3,12 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 import 'package:sigchos_smart_tourist/presentation/views/home/home_view.dart';
 import 'package:sigchos_smart_tourist/presentation/viewmodels/lugares_viewmodel.dart';
 import 'package:sigchos_smart_tourist/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:sigchos_smart_tourist/presentation/viewmodels/notifications_viewmodel.dart';
 import 'package:sigchos_smart_tourist/domain/repositories/lugares_repository.dart';
 import 'package:sigchos_smart_tourist/domain/repositories/auth_repository.dart';
-import 'package:sigchos_smart_tourist/domain/entities/lugar.dart';
 
 import 'home_view_test.mocks.dart';
 
@@ -32,6 +33,9 @@ void main() {
         ChangeNotifierProvider<AuthViewModel>(
           create: (_) => AuthViewModel(repository: mockAuthRepo),
         ),
+        ChangeNotifierProvider<NotificationsViewModel>(
+          create: (_) => NotificationsViewModel(autoInit: false),
+        ),
       ],
       child: const MaterialApp(home: HomeView()),
     );
@@ -40,12 +44,16 @@ void main() {
   testWidgets('debe mostrar el título y las categorías', (tester) async {
     when(mockLugaresRepo.getLugares()).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(createWidget());
+    await mockNetworkImagesFor(() async {
+      await tester.pumpWidget(createWidget());
 
-    expect(find.text('Sigchos Smart Tourist'), findsOneWidget);
-    expect(find.text('Atractivos'), findsOneWidget);
-    expect(find.text('Hosterías'), findsOneWidget);
-    expect(find.text('Emprendimientos'), findsOneWidget);
-    expect(find.text('Rutas'), findsOneWidget);
+      expect(find.text('Sigchos Smart Tourist'), findsOneWidget);
+      expect(find.text('Atractivos'), findsOneWidget);
+      // "Hosterías" aparece tanto en la tarjeta de acceso rápido como en el
+      // ítem del bottom nav.
+      expect(find.text('Hosterías'), findsWidgets);
+      expect(find.text('Emprendimientos'), findsOneWidget);
+      expect(find.text('Rutas y Senderos'), findsOneWidget);
+    });
   });
 }

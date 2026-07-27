@@ -1,19 +1,39 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Smoke test de la app: en vez de levantar MyApp() completo (que crea
+// repositorios reales respaldados por Firebase y falla sin un backend real),
+// se prueba AuthView -la pantalla inicial real- con un AuthRepository
+// mockeado, igual que en test/widgets/auth/auth_view_test.dart.
 
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sigchos_smart_tourist/app.dart';
+import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
+import 'package:sigchos_smart_tourist/presentation/views/auth/auth_view.dart';
+import 'package:sigchos_smart_tourist/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:sigchos_smart_tourist/domain/entities/usuario.dart';
+
+import 'widgets/auth/auth_view_test.mocks.dart';
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    final mockAuthRepository = MockAuthRepository();
+    final authStateController = StreamController<Usuario?>.broadcast();
+    addTearDown(authStateController.close);
 
-    // Verify that the login title exists
+    when(mockAuthRepository.onAuthStateChanged)
+        .thenAnswer((_) => authStateController.stream);
+    when(mockAuthRepository.getCurrentUser()).thenAnswer((_) async => null);
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => AuthViewModel(repository: mockAuthRepository),
+        child: MaterialApp(home: const AuthView()),
+      ),
+    );
+
+    // Verifica que la pantalla inicial de la app (login) se muestra.
     expect(find.text('Sigchos Smart Tourist'), findsOneWidget);
+    expect(find.text('Iniciar Sesión'), findsOneWidget);
   });
 }

@@ -26,6 +26,48 @@ class Lugar {
     required this.creadoPor,
     required this.fechaCreacion,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Lugar &&
+        other.id == id &&
+        other.nombre == nombre &&
+        other.tipo == tipo &&
+        other.descripcion == descripcion &&
+        _fotosEqual(other.fotos) &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
+        other.geohash == geohash &&
+        other.promedioCalificacion == promedioCalificacion &&
+        other.totalCalificaciones == totalCalificaciones &&
+        other.creadoPor == creadoPor &&
+        other.fechaCreacion == fechaCreacion;
+  }
+
+  bool _fotosEqual(List<String> other) {
+    if (other.length != fotos.length) return false;
+    for (var i = 0; i < fotos.length; i++) {
+      if (fotos[i] != other[i]) return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        nombre,
+        tipo,
+        descripcion,
+        Object.hashAll(fotos),
+        latitude,
+        longitude,
+        geohash,
+        promedioCalificacion,
+        totalCalificaciones,
+        creadoPor,
+        fechaCreacion,
+      );
 }
 
 class Comentario {

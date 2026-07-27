@@ -176,7 +176,7 @@ void main() {
       await tester.tap(find.text('REGISTRARME'));
       await tester.pump();
 
-      expect(find.text('El campo nombre es obligatorio'), findsOneWidget);
+      expect(find.text('El campo Nombre es obligatorio'), findsOneWidget);
       verifyNever(mockAuthRepository.signUp(
         nombre: anyNamed('nombre'),
         email: anyNamed('email'),

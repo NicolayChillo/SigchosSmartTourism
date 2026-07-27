@@ -22,8 +22,13 @@ class NotificationsViewModel extends ChangeNotifier {
   List<AppNotification> get items => List.unmodifiable(_items);
   int get unreadCount => _items.length;
 
-  NotificationsViewModel() {
-    NotificationService.instance.init(onMessage: _handleMessage);
+  /// [autoInit] en false evita registrar el servicio real de notificaciones
+  /// push (Firebase Messaging), útil en tests de widgets que no inicializan
+  /// Firebase.
+  NotificationsViewModel({bool autoInit = true}) {
+    if (autoInit) {
+      NotificationService.instance.init(onMessage: _handleMessage);
+    }
   }
 
   void _handleMessage(RemoteMessage message) {
