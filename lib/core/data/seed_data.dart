@@ -8,11 +8,17 @@ import '../../domain/entities/hosteria.dart';
 import '../../domain/entities/emprendimiento.dart';
 import '../utils/geohash_helper.dart';
 
+// Fotos servidas desde Firebase Storage (bucket sigchos-smart-tourism), donde
+// se subió una copia 1:1 de assets/images/ bajo el prefijo catalogo/. Lectura
+// pública habilitada en storage.rules para esta carpeta.
+const String _storageBucket = 'sigchos-smart-tourism.firebasestorage.app';
+
 List<String> _photos(String category, String slug, int count) {
-  return List.generate(
-    count,
-    (i) => 'assets/images/$category/$slug/${i + 1}.jpg',
-  );
+  return List.generate(count, (i) {
+    final objectPath = 'catalogo/$category/$slug/${i + 1}.jpg';
+    final encoded = Uri.encodeComponent(objectPath);
+    return 'https://firebasestorage.googleapis.com/v0/b/$_storageBucket/o/$encoded?alt=media';
+  });
 }
 
 final DateTime _seedDate = DateTime(2026, 1, 1);
