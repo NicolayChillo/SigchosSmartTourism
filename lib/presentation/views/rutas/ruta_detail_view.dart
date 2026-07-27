@@ -7,6 +7,7 @@ import '../../../core/utils/map_launcher.dart';
 import '../../../domain/entities/lugar.dart';
 import '../../../domain/entities/ruta.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
+import '../../widgets/photo_gallery.dart';
 import '../lugares/lugar_detail_view.dart';
 
 class RutaDetailView extends StatelessWidget {
@@ -42,6 +43,7 @@ class RutaDetailView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (ruta.fotos.isNotEmpty) PhotoGallery(fotos: ruta.fotos),
             if (puntos.isNotEmpty)
               SizedBox(
                 height: 260,
@@ -68,6 +70,10 @@ class RutaDetailView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(ruta.nombre, style: Theme.of(context).textTheme.titleLarge),
+                  if (ruta.descripcion.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(ruta.descripcion, style: Theme.of(context).textTheme.bodyMedium),
+                  ],
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 20,

@@ -4,8 +4,10 @@ class RutaModel extends Ruta {
   const RutaModel({
     required super.id,
     required super.nombre,
+    super.descripcion,
     required super.lugarId,
     required super.puntosGPS,
+    super.fotos,
     required super.distanciaKm,
     required super.tiempoEstimadoMin,
     required super.dificultad,
@@ -25,8 +27,10 @@ class RutaModel extends Ruta {
     return RutaModel(
       id: id,
       nombre: json['nombre'] ?? '',
+      descripcion: json['descripcion'] ?? '',
       lugarId: json['lugarId'] ?? '',
       puntosGPS: puntos,
+      fotos: (json['fotos'] as List<dynamic>?)?.map((f) => f as String).toList() ?? const [],
       distanciaKm: (json['distanciaKm'] as num?)?.toDouble() ?? 0.0,
       tiempoEstimadoMin: (json['tiempoEstimadoMin'] as num?)?.toInt() ?? 0,
       dificultad: json['dificultad'] ?? 'Fácil',
@@ -36,11 +40,13 @@ class RutaModel extends Ruta {
   Map<String, dynamic> toJson() {
     return {
       'nombre': nombre,
+      'descripcion': descripcion,
       'lugarId': lugarId,
       'puntosGPS': puntosGPS.map((p) => {
         'latitude': p.latitude,
         'longitude': p.longitude,
       }).toList(),
+      'fotos': fotos,
       'distanciaKm': distanciaKm,
       'tiempoEstimadoMin': tiempoEstimadoMin,
       'dificultad': dificultad,

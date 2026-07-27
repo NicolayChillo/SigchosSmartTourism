@@ -48,6 +48,37 @@ class AdminView extends StatelessWidget {
     );
   }
 
+  Future<void> _cargarRutasIniciales(BuildContext context) async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Cargar rutas iniciales'),
+        content: const Text(
+          'Esto creará las 12 rutas de senderismo reales de Sigchos (Circuito Quilotoa y otras) en Firestore. '
+          'Vuelve a ejecutarlo solo si sabes que quieres duplicar registros.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Cargar')),
+        ],
+      ),
+    );
+    if (confirmado != true || !context.mounted) return;
+
+    final vm = Provider.of<LugaresViewModel>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(const SnackBar(content: Text('Cargando rutas iniciales...')));
+
+    var creados = 0;
+    for (final ruta in seedRutas) {
+      if (await vm.createRuta(ruta)) creados++;
+    }
+
+    messenger.showSnackBar(
+      SnackBar(content: Text('Rutas cargadas: $creados registros creados.')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -60,6 +91,11 @@ class AdminView extends StatelessWidget {
               tooltip: 'Cargar catálogo inicial',
               icon: const Icon(Icons.cloud_upload_outlined),
               onPressed: () => _cargarCatalogoInicial(context),
+            ),
+            IconButton(
+              tooltip: 'Cargar rutas iniciales',
+              icon: const Icon(Icons.route_outlined),
+              onPressed: () => _cargarRutasIniciales(context),
             ),
           ],
           bottom: const TabBar(

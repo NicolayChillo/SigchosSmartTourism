@@ -6,6 +6,7 @@
 import '../../domain/entities/lugar.dart';
 import '../../domain/entities/hosteria.dart';
 import '../../domain/entities/emprendimiento.dart';
+import '../../domain/entities/ruta.dart';
 import '../utils/geohash_helper.dart';
 
 // Fotos servidas desde Firebase Storage (bucket sigchos-smart-tourism), donde
@@ -380,5 +381,193 @@ final List<Emprendimiento> seedEmprendimientos = [
     geohash: GeohashHelper.encodeGeohash(-0.7010, -78.8850),
     promedioCalificacion: 0,
     totalCalificaciones: 0,
+  ),
+];
+
+// 12 rutas de senderismo reales del cantón, transcritas de
+// data_source/Información Rutas Sigchos.pdf. El PDF no incluye coordenadas
+// GPS del trazado (a diferencia del de atractivos), así que puntosGPS usa
+// solo puntos aproximados de inicio/fin (centros de poblados o del atractivo
+// de referencia) para ubicar la ruta en el mapa; no son un track real.
+final List<Ruta> seedRutas = [
+  Ruta(
+    id: '',
+    nombre: 'Circuito Quilotoa: Chugchilán - Laguna Quilotoa',
+    descripcion:
+        'Etapa final y más exigente del Circuito Quilotoa. Desciende hacia el cañón del río Toachi, con paredes de ceniza volcánica y roca sedimentaria, y luego asciende en zigzag entre cultivos de habas y cebada hasta el borde del cráter, con vista panorámica de la laguna turquesa. Pasa por la Cascada Golondrina.\nViento fuerte y frío en la cresta del cráter.',
+    lugarId: 'T9J1q37DCMTHLIblzNr1',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.9083, longitude: -78.8886),
+      RutaPunto(latitude: -0.867189, longitude: -78.908401),
+    ],
+    fotos: _photos('rutas', 'circuito-quilotoa-chugchilan-laguna-quilotoa', 2),
+    distanciaKm: 13.0,
+    tiempoEstimadoMin: 315,
+    dificultad: 'Difícil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Circuito Quilotoa: Isinliví - Chugchilán',
+    descripcion:
+        'Conecta Isinliví con Chugchilán atravesando el cañón del río Toachi, alternando descensos hacia el río con ascensos entre senderos rurales y miradores naturales (Macacunga, Cristal, Anchi Quilotoa, Pugara). Es posible avistar curiquingues y, ocasionalmente, cóndores andinos.\nSeñalización difusa en los primeros 5 km; cruzar los ríos por los troncos habilitados.',
+    lugarId: 'H5gKC4ODRfxbJvNwfMd2',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.7908, longitude: -78.8283),
+      RutaPunto(latitude: -0.9083, longitude: -78.8886),
+    ],
+    fotos: _photos('rutas', 'circuito-quilotoa-isinlivi-chugchilan', 2),
+    distanciaKm: 12.4,
+    tiempoEstimadoMin: 300,
+    dificultad: 'Difícil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Circuito Quilotoa: Sigchos - Isinliví',
+    descripcion:
+        'Etapa inicial y más accesible del Circuito Quilotoa, ideal para aclimatarse. Sale de la ciudad de Sigchos y desciende/asciende por caminos de montaña, prados andinos y quebradas hasta el poblado de Isinliví, con vistas al cañón y zonas de pastoreo.\nTerreno con tramos de barro y arroyos pequeños.',
+    lugarId: '',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.7012, longitude: -78.8872),
+      RutaPunto(latitude: -0.7908, longitude: -78.8283),
+    ],
+    fotos: _photos('rutas', 'circuito-quilotoa-sigchos-isinlivi', 2),
+    distanciaKm: 10.0,
+    tiempoEstimadoMin: 255,
+    dificultad: 'Moderado',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Circuito Cráter Quilotoa',
+    descripcion:
+        'Ruta circular insignia del Circuito Quilotoa: bordea por completo el filo de la caldera volcánica, con vistas de 360° hacia la laguna turquesa y los Andes. Pasa por el Mirador Quilotoa y el Monte Juyende (3.930 m s.n.m.).\nViento extremadamente fuerte en la cresta y temperaturas de 3°C a 12°C; se recomienda salir temprano para evitar niebla o lluvia.',
+    lugarId: 'T9J1q37DCMTHLIblzNr1',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.8695, longitude: -78.9120),
+      RutaPunto(latitude: -0.8650, longitude: -78.9040),
+    ],
+    fotos: _photos('rutas', 'circuito-crater-quilotoa', 2),
+    distanciaKm: 10.8,
+    tiempoEstimadoMin: 285,
+    dificultad: 'Difícil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Circuito Quilotoa Ruta Completa',
+    descripcion:
+        'El trek de varios días más reconocido de Ecuador: conecta Sigchos con la Laguna Quilotoa atravesando valles andinos, el cañón del río Toachi y las comunidades de Isinliví y Chugchilán, culminando en la caldera volcánica a más de 3.800 m s.n.m. Se recorre habitualmente en 3 días.\nSe reportan deslaves puntuales en el trayecto.',
+    lugarId: 'T9J1q37DCMTHLIblzNr1',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.7012, longitude: -78.8872),
+      RutaPunto(latitude: -0.867189, longitude: -78.908401),
+    ],
+    fotos: _photos('rutas', 'circuito-quilotoa-ruta-completa', 2),
+    distanciaKm: 34.8,
+    tiempoEstimadoMin: 840,
+    dificultad: 'Difícil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Playita Laguna Quilotoa',
+    descripcion:
+        'Descenso corto pero exigente desde el poblado y miradores de Quilotoa hasta la orilla ("playita") de la laguna, con alquiler de kayaks/canoas. El regreso exige un ascenso empinado a gran altitud.\nSe ofrece servicio de ascenso a caballo/mula para quienes tengan dificultad en la subida.',
+    lugarId: 'T9J1q37DCMTHLIblzNr1',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.8631, longitude: -78.9075),
+      RutaPunto(latitude: -0.8672, longitude: -78.9095),
+    ],
+    fotos: _photos('rutas', 'playita-laguna-quilotoa', 2),
+    distanciaKm: 3.5,
+    tiempoEstimadoMin: 135,
+    dificultad: 'Difícil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Isinliví - Mirador',
+    descripcion:
+        'Ruta de ida y vuelta que asciende desde el poblado de Isinliví por laderas y paisajes rurales hasta un mirador panorámico, con vista lejana al cráter del Quilotoa. Pasa cerca del Llullu Llama Mountain Lodge.\nUn tramo del mapa estándar cruza un puente deteriorado; se recomienda la variante segura por la zona de la iglesia.',
+    lugarId: 'FLPBlUnAxmPz5lraWLqZ',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.7908, longitude: -78.8283),
+      RutaPunto(latitude: -0.8020, longitude: -78.8450),
+    ],
+    fotos: _photos('rutas', 'isinlivi-mirador', 2),
+    distanciaKm: 10.9,
+    tiempoEstimadoMin: 240,
+    dificultad: 'Moderado',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Mirador Torre Quilotoa desde Hotel Chukirawa',
+    descripcion:
+        'Caminata corta y accesible cerca del Hotel Chukirawa que bordea la caldera hasta el Mirador El Torre (3.910 m), uno de los puntos más altos de la cresta, con vista panorámica de la laguna turquesa.\nEntrada con tarifa de \$2 por persona; zona pet-friendly con parqueadero, baños y artesanías.',
+    lugarId: 'T9J1q37DCMTHLIblzNr1',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.8631, longitude: -78.9075),
+      RutaPunto(latitude: -0.8650, longitude: -78.9060),
+    ],
+    fotos: _photos('rutas', 'mirador-torre-quilotoa-desde-hotel-chukirawa', 2),
+    distanciaKm: 3.1,
+    tiempoEstimadoMin: 45,
+    dificultad: 'Fácil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Cerro Nahuire',
+    descripcion:
+        'Caminata corta de páramo puro que asciende al pico del Cerro Nahuire, a más de 4.150 m s.n.m. En días despejados ofrece una panorámica de 360° hacia el volcán Cotopaxi y la Reserva Ecológica Los Ilinizas.\nRequiere buena aclimatación por la altitud; presencia de ganado y tramos de barro/maleza resbaladiza.',
+    lugarId: 'SwjEBuI6txkA9GkZSqjZ',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.6800, longitude: -78.7400),
+      RutaPunto(latitude: -0.6850, longitude: -78.7350),
+    ],
+    fotos: _photos('rutas', 'cerro-nahuire', 2),
+    distanciaKm: 3.1,
+    tiempoEstimadoMin: 75,
+    dificultad: 'Moderado',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Isinliví - Guantualó',
+    descripcion:
+        'Ruta circular que conecta Isinliví con la comunidad Kichwa de Guantualó, descendiendo hacia el Cañón del Río Toachi (con erosión visible de toba volcánica) y cruzando el río por un puente peatonal antes de ascender al altiplano con vistas a Cotopaxi.\nPresencia de perros de pastoreo territoriales en los alrededores de las fincas.',
+    lugarId: 'WFikdGckNku7o35um9D0',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.7908, longitude: -78.8283),
+      RutaPunto(latitude: -0.8300, longitude: -78.8500),
+    ],
+    fotos: _photos('rutas', 'isinlivi-guantualo', 2),
+    distanciaKm: 10.3,
+    tiempoEstimadoMin: 255,
+    dificultad: 'Difícil',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Mirador Pugara',
+    descripcion:
+        'Ruta circular que asciende a casi 4.000 m s.n.m. hasta un balcón natural con vistas de 360° a la Cordillera Central, el Valle Interandino y, en días despejados, los volcanes Cotopaxi y Chimborazo.\nEl inicio tradicional del sendero sufrió un deslave; algunos tramos cruzan terrenos privados donde puede pedirse un valor simbólico de paso.',
+    lugarId: 'd8cSfoelYfNjIQg2sfT6',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.7000, longitude: -78.8300),
+      RutaPunto(latitude: -0.7050, longitude: -78.8250),
+    ],
+    fotos: _photos('rutas', 'mirador-pugara', 2),
+    distanciaKm: 2.6,
+    tiempoEstimadoMin: 75,
+    dificultad: 'Moderado',
+  ),
+  Ruta(
+    id: '',
+    nombre: 'Chugchilán - Quesería Chinalo Alto',
+    descripcion:
+        'Ascenso desde Chugchilán a través de paisajes rurales y los límites del bosque nublado de la Reserva Ecológica Los Ilinizas, hasta las queserías artesanales de Chinalo Alto, donde se puede degustar y comprar queso local.\nLa primera quesería (San Miguelito) suele estar cerrada; la que está en funcionamiento activo queda más arriba en el sendero.',
+    lugarId: 'H5gKC4ODRfxbJvNwfMd2',
+    puntosGPS: const [
+      RutaPunto(latitude: -0.9083, longitude: -78.8886),
+      RutaPunto(latitude: -0.8950, longitude: -78.8650),
+    ],
+    fotos: _photos('rutas', 'chugchilan-queseria-chinalo-alto', 2),
+    distanciaKm: 14.0,
+    tiempoEstimadoMin: 315,
+    dificultad: 'Moderado',
   ),
 ];

@@ -1,6 +1,7 @@
 // One-off build tool: copies the best photos from data_source/Galeria into
-// assets/images/, resized and compressed, so they can be bundled with the app
-// as local assets (no Firebase Storage). Run with: dart run tool/prepare_assets.dart
+// assets/images/, resized and compressed, so they can be bundled locally and
+// uploaded to Firebase Storage (see lib/core/data/seed_data.dart).
+// Run with: dart run tool/prepare_assets.dart
 import 'dart:io';
 import 'package:image/image.dart' as img;
 
@@ -12,6 +13,7 @@ final Map<String, String> categoryFolders = {
   'Atractivos': 'atractivos',
   'Hospedaje': 'hosterias',
   'Emprendimientos': 'emprendimientos',
+  'Rutas': 'rutas',
 };
 
 String slugify(String input) {

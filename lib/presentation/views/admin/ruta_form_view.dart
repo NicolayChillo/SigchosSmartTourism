@@ -8,6 +8,7 @@ import '../../../core/widgets/custom_button.dart';
 import '../../../domain/entities/ruta.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
 import '../../widgets/location_picker_field.dart' show kSigchosCentro;
+import '../../widgets/photo_picker_field.dart';
 
 const List<String> dificultades = ['Fácil', 'Moderado', 'Difícil'];
 
@@ -23,10 +24,12 @@ class RutaFormView extends StatefulWidget {
 class _RutaFormViewState extends State<RutaFormView> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nombreCtrl;
+  late final TextEditingController _descripcionCtrl;
   late final TextEditingController _tiempoCtrl;
   late String _dificultad;
   String? _lugarId;
   late List<LatLng> _puntos;
+  late List<String> _fotos;
   bool _guardando = false;
 
   bool get _esEdicion => widget.ruta != null;
@@ -36,15 +39,18 @@ class _RutaFormViewState extends State<RutaFormView> {
     super.initState();
     final r = widget.ruta;
     _nombreCtrl = TextEditingController(text: r?.nombre ?? '');
+    _descripcionCtrl = TextEditingController(text: r?.descripcion ?? '');
     _tiempoCtrl = TextEditingController(text: r?.tiempoEstimadoMin.toString() ?? '');
     _dificultad = r?.dificultad ?? dificultades.first;
     _lugarId = r?.lugarId;
     _puntos = r?.puntosGPS.map((p) => LatLng(p.latitude, p.longitude)).toList() ?? [];
+    _fotos = List.of(r?.fotos ?? const []);
   }
 
   @override
   void dispose() {
     _nombreCtrl.dispose();
+    _descripcionCtrl.dispose();
     _tiempoCtrl.dispose();
     super.dispose();
   }
@@ -84,8 +90,10 @@ class _RutaFormViewState extends State<RutaFormView> {
     final ruta = Ruta(
       id: r?.id ?? '',
       nombre: _nombreCtrl.text.trim(),
+      descripcion: _descripcionCtrl.text.trim(),
       lugarId: _lugarId!,
       puntosGPS: _puntos.map((p) => RutaPunto(latitude: p.latitude, longitude: p.longitude)).toList(),
+      fotos: _fotos,
       distanciaKm: _distanciaCalculada,
       tiempoEstimadoMin: int.tryParse(_tiempoCtrl.text.trim()) ?? 0,
       dificultad: _dificultad,
@@ -122,6 +130,17 @@ class _RutaFormViewState extends State<RutaFormView> {
                 controller: _nombreCtrl,
                 decoration: const InputDecoration(labelText: 'Nombre de la ruta'),
                 validator: (v) => Validators.validateRequired(v, 'Nombre'),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _descripcionCtrl,
+                decoration: const InputDecoration(labelText: 'Descripción'),
+                maxLines: 4,
+              ),
+              const SizedBox(height: 16),
+              PhotoPickerField(
+                fotos: _fotos,
+                onChanged: (fotos) => setState(() => _fotos = fotos),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(

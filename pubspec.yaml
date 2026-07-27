@@ -96,6 +96,18 @@ flutter:
     - assets/images/hosterias/hosteria-el-trapiche/
     - assets/images/hosterias/hosteria-san-jose/
     - assets/images/hosterias/hosteria-san-miguel/
+    - assets/images/rutas/cerro-nahuire/
+    - assets/images/rutas/chugchilan-queseria-chinalo-alto/
+    - assets/images/rutas/circuito-crater-quilotoa/
+    - assets/images/rutas/circuito-quilotoa-chugchilan-laguna-quilotoa/
+    - assets/images/rutas/circuito-quilotoa-isinlivi-chugchilan/
+    - assets/images/rutas/circuito-quilotoa-ruta-completa/
+    - assets/images/rutas/circuito-quilotoa-sigchos-isinlivi/
+    - assets/images/rutas/isinlivi-guantualo/
+    - assets/images/rutas/isinlivi-mirador/
+    - assets/images/rutas/mirador-pugara/
+    - assets/images/rutas/mirador-torre-quilotoa-desde-hotel-chukirawa/
+    - assets/images/rutas/playita-laguna-quilotoa/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
