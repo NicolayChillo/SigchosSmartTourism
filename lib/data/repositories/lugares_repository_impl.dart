@@ -28,15 +28,18 @@ class LugaresRepositoryImpl implements LugaresRepository {
     if (await networkInfo.isConnected) {
       try {
         final remoteLugares = await remoteDataSource.getLugares(tipo: tipo);
+        // ✅ Convierte cada modelo a Lugar (entidad)
+        final lugares = remoteLugares.map((model) => model as Lugar).toList();
         await localDataSource.cacheLugares(remoteLugares);
-        return remoteLugares;
+        return lugares;
       } catch (e) {
-        return await localDataSource.getCachedLugares();
+        final cached = await localDataSource.getCachedLugares();
+        return cached.map((model) => model as Lugar).toList();
       }
     } else {
       final cached = await localDataSource.getCachedLugares();
       if (cached.isNotEmpty) {
-        return cached;
+        return cached.map((model) => model as Lugar).toList();
       }
       throw const ConnectionFailure();
     }
