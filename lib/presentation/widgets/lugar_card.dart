@@ -9,6 +9,8 @@ class LugarCard extends StatelessWidget {
   final double rating;
   final int totalReviews;
   final VoidCallback onTap;
+  final bool isFavorito;
+  final VoidCallback? onFavoritoTap;
 
   const LugarCard({
     super.key,
@@ -18,6 +20,8 @@ class LugarCard extends StatelessWidget {
     required this.rating,
     required this.totalReviews,
     required this.onTap,
+    this.isFavorito = false,
+    this.onFavoritoTap,
   });
 
   @override
@@ -65,6 +69,27 @@ class LugarCard extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (onFavoritoTap != null)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Material(
+                      color: Colors.black.withValues(alpha: 0.35),
+                      shape: const CircleBorder(),
+                      child: InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: onFavoritoTap,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            isFavorito ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorito ? Colors.redAccent : Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
             // Text and Details

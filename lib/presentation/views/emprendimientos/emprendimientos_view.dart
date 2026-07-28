@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
+import '../../viewmodels/auth_viewmodel.dart';
+import '../../viewmodels/favoritos_viewmodel.dart';
 import '../../widgets/lugar_card.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -24,11 +26,17 @@ class _EmprendimientosViewState extends State<EmprendimientosView> {
 
   void _loadEmprendimientos() {
     Provider.of<LugaresViewModel>(context, listen: false).fetchEmprendimientos();
+    final uid = Provider.of<AuthViewModel>(context, listen: false).currentUser?.uid;
+    if (uid != null) {
+      Provider.of<FavoritosViewModel>(context, listen: false).cargar(uid);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final placesVm = Provider.of<LugaresViewModel>(context);
+    final favoritosVm = Provider.of<FavoritosViewModel>(context);
+    final uid = Provider.of<AuthViewModel>(context).currentUser?.uid;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,6 +70,16 @@ class _EmprendimientosViewState extends State<EmprendimientosView> {
                             imageUrl: emp.fotos.isNotEmpty ? emp.fotos[0] : null,
                             rating: emp.promedioCalificacion,
                             totalReviews: emp.totalCalificaciones,
+                            isFavorito: favoritosVm.esFavorito('emprendimientos', emp.id),
+                            onFavoritoTap: uid == null
+                                ? null
+                                : () => favoritosVm.toggle(
+                                      uid: uid,
+                                      tipo: 'emprendimientos',
+                                      itemId: emp.id,
+                                      nombre: emp.nombre,
+                                      foto: emp.fotos.isNotEmpty ? emp.fotos[0] : null,
+                                    ),
                             onTap: () {
                               Navigator.push(
                                 context,

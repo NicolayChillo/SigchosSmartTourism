@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth_viewmodel.dart';
+import '../../viewmodels/favoritos_viewmodel.dart';
 import '../../../core/theme/export.dart';
 import '../../../core/widgets/custom_button.dart';
+import 'favoritos_view.dart';
+import 'ayuda_soporte_view.dart';
 
 class PerfilView extends StatelessWidget {
   const PerfilView({super.key});
@@ -86,19 +89,17 @@ class PerfilView extends StatelessWidget {
                     leading: const Icon(Icons.favorite_border, color: ColoresApp.primario),
                     title: const Text('Mis Favoritos'),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.history_outlined, color: ColoresApp.primario),
-                    title: const Text('Historial de Rutas'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritosView()));
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.help_outline, color: ColoresApp.primario),
                     title: const Text('Ayuda & Soporte'),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AyudaSoporteView()));
+                    },
                   ),
                   const SizedBox(height: 40),
                   CustomButton(
@@ -107,6 +108,7 @@ class PerfilView extends StatelessWidget {
                     onPressed: () async {
                       await authVm.logout();
                       if (context.mounted) {
+                        Provider.of<FavoritosViewModel>(context, listen: false).limpiar();
                         Navigator.pushNamedAndRemoveUntil(context, '/auth', (route) => false);
                       }
                     },

@@ -13,11 +13,13 @@ import 'data/datasources/local/local_lugares_datasource.dart';
 // Repositories
 import 'data/repositories/auth_repository_impl.dart';
 import 'data/repositories/lugares_repository_impl.dart';
+import 'data/repositories/favoritos_repository_impl.dart';
 
 // ViewModels
 import 'presentation/viewmodels/auth_viewmodel.dart';
 import 'presentation/viewmodels/lugares_viewmodel.dart';
 import 'presentation/viewmodels/notifications_viewmodel.dart';
+import 'presentation/viewmodels/favoritos_viewmodel.dart';
 
 // Views
 import 'presentation/views/auth/auth_view.dart';
@@ -48,6 +50,9 @@ class MyApp extends StatelessWidget {
         Provider<AuthRepositoryImpl>(
           create: (_) => AuthRepositoryImpl(),
         ),
+        Provider<FavoritosRepositoryImpl>(
+          create: (_) => FavoritosRepositoryImpl(),
+        ),
         ProxyProvider3<FirestoreLugaresDataSource, LocalLugaresDataSource, NetworkInfo, LugaresRepositoryImpl>(
           update: (_, remote, local, network, previous) => LugaresRepositoryImpl(
             remoteDataSource: remote,
@@ -69,6 +74,11 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<NotificationsViewModel>(
           create: (_) => NotificationsViewModel(),
+        ),
+        ChangeNotifierProvider<FavoritosViewModel>(
+          create: (context) => FavoritosViewModel(
+            repository: Provider.of<FavoritosRepositoryImpl>(context, listen: false),
+          ),
         ),
       ],
       child: MaterialApp(

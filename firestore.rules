@@ -21,6 +21,11 @@ service cloud.firestore {
         (request.auth.uid == uid && request.resource.data.rol == resource.data.rol) || isAdmin()
       );
       allow delete: if isAdmin();
+
+      // Favoritos: privados, solo el dueño de la cuenta los lee/escribe.
+      match /favoritos/{favId} {
+        allow read, write: if isSignedIn() && request.auth.uid == uid;
+      }
     }
 
     // Catálogo (lugares, hosterías, emprendimientos, rutas): lectura pública,

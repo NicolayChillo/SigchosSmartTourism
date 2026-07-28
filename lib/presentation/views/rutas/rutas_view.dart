@@ -101,14 +101,15 @@ class _RutasViewState extends State<RutasView> {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
-                                child: Row(
+                                child: Wrap(
+                                  spacing: 4,
+                                  runSpacing: 4,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
                                     Icon(Icons.social_distance, size: 16, color: ColoresApp.textoClaro),
-                                    const SizedBox(width: 4),
                                     Text(Formatters.formatDistance(ruta.distanciaKm)),
-                                    const SizedBox(width: 16),
+                                    const SizedBox(width: 12),
                                     Icon(Icons.access_time, size: 16, color: ColoresApp.textoClaro),
-                                    const SizedBox(width: 4),
                                     Text(Formatters.formatDuration(ruta.tiempoEstimadoMin)),
                                   ],
                                 ),

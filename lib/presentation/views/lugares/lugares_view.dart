@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/lugares_viewmodel.dart';
+import '../../viewmodels/auth_viewmodel.dart';
+import '../../viewmodels/favoritos_viewmodel.dart';
 import 'lugar_detail_view.dart';
 import '../../widgets/lugar_card.dart';
 import '../../../core/widgets/loading_widget.dart';
@@ -39,6 +41,10 @@ class _LugaresViewState extends State<LugaresView> {
     Provider.of<LugaresViewModel>(context, listen: false).fetchLugares(
       tipo: _selectedTipo.isEmpty ? null : _selectedTipo,
     );
+    final uid = Provider.of<AuthViewModel>(context, listen: false).currentUser?.uid;
+    if (uid != null) {
+      Provider.of<FavoritosViewModel>(context, listen: false).cargar(uid);
+    }
   }
 
   Future<void> _buscarCercanos(BuildContext context, LugaresViewModel vm) async {
@@ -140,6 +146,8 @@ class _LugaresViewState extends State<LugaresView> {
   @override
   Widget build(BuildContext context) {
     final placesVm = Provider.of<LugaresViewModel>(context);
+    final favoritosVm = Provider.of<FavoritosViewModel>(context);
+    final uid = Provider.of<AuthViewModel>(context).currentUser?.uid;
 
     return Scaffold(
       appBar: AppBar(
@@ -220,6 +228,16 @@ class _LugaresViewState extends State<LugaresView> {
                                   imageUrl: lugar.fotos.isNotEmpty ? lugar.fotos[0] : null,
                                   rating: lugar.promedioCalificacion,
                                   totalReviews: lugar.totalCalificaciones,
+                                  isFavorito: favoritosVm.esFavorito('lugares', lugar.id),
+                                  onFavoritoTap: uid == null
+                                      ? null
+                                      : () => favoritosVm.toggle(
+                                            uid: uid,
+                                            tipo: 'lugares',
+                                            itemId: lugar.id,
+                                            nombre: lugar.nombre,
+                                            foto: lugar.fotos.isNotEmpty ? lugar.fotos[0] : null,
+                                          ),
                                   onTap: () {
                                     Navigator.push(
                                       context,
